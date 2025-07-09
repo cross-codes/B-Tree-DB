@@ -5,9 +5,7 @@ An implementation of an SQLite - like database written in C++ with no
 external dependencies.
 
 The app is features a REPL, a query parser and a
-B-Tree implementation based off of Cormen, T. H., Leiserson,
-C. E., Rivest, R. L., & Stein, C. (2022).
-Introduction to Algorithms (4th ed.). MIT Press
+B-Tree implementation based off of Introduction to Algorithms (4th ed).
 
 </div>
 
