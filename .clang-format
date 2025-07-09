@@ -1,0 +1,8 @@
+BasedOnStyle: Microsoft
+IndentWidth: 2
+UseTab: Never
+ColumnLimit: 80
+AlignConsecutiveAssignments:
+  Enabled: true
+  AcrossEmptyLines: true
+  AcrossComments: false
