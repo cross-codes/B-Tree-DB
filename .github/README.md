@@ -11,6 +11,12 @@ B-Tree implementation based off of Introduction to Algorithms (4th ed).
 
 ---
 
+# Pending features
+
+Remove hardcoded row format
+Implement B-Tree
+Use modern C++ equivalents instead of unsafe `memcpy` calls
+
 # Build instructions
 
 To build the project, make sure you have `Cmake` installed, and modify
