@@ -8,8 +8,9 @@ struct Row
 {
 public:
   uint32_t id;
-  char username[COLUMN_USERNAME_SIZE];
-  char email[COLUMN_EMAIL_SIZE];
+  char username[COLUMN_USERNAME_SIZE + 1];
+  char email[COLUMN_EMAIL_SIZE + 1];
+  bool truncated{};
 
   Row(uint32_t id, const std::string &username, const std::string &email);
 

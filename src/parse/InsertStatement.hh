@@ -1,12 +1,11 @@
 #pragma once
 
 #include "../Statement.hh"
-#include <cstdint>
 
 class InsertStatement : public Statement
 {
 private:
-  uint32_t ID_;
+  int ID_;
   std::string username_, email_;
   bool error_;
 
