@@ -14,8 +14,8 @@ B-Tree implementation based off of Introduction to Algorithms (4th ed).
 # Pending features
 
 Remove hardcoded row format
-Implement B-Tree
-Use modern C++ equivalents instead of unsafe `memcpy` calls
+
+Use modern C++ equivalents over unsafe `memcpy` calls
 
 # Build instructions
 
