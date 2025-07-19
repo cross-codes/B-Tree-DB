@@ -16,7 +16,14 @@ void display_prompt()
 
 int main(int argc, char **argv)
 {
-  Table table;
+  if (argc < 2)
+  {
+    std::cout << "Must supply a database filename\n";
+    std::exit(1);
+  }
+
+  std::string filename(argv[1]);
+  Table table(filename);
 
   std::string input_buffer;
   while (true)
@@ -28,14 +35,14 @@ int main(int argc, char **argv)
 
     if (input_buffer[0] == '.')
     {
-      auto code = meta::process_meta_cmd(input_buffer);
+      auto code = meta::process_meta_cmd(input_buffer, table);
       switch (code)
       {
       case MetaCommandResult::META_COMMAND_SUCCESS:
         continue;
 
       case MetaCommandResult::META_COMMAND_UNRECOGNIZED_COMMAND:
-        std::cout << std::format("Unrecognized command '{}'\n", input_buffer);
+        std::cerr << std::format("Unrecognized command '{}'\n", input_buffer);
         continue;
       }
     }
@@ -47,6 +54,7 @@ int main(int argc, char **argv)
       if (input_buffer.substr(0, 6) == "select")
         return std::make_unique<SelectStatement>(input_buffer);
 
+      std::cerr << std::format("Unrecognized command '{}' \n", input_buffer);
       return nullptr;
     };
 

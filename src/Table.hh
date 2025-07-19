@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Pager.hh"
 #include "Row.hh"
 #include "defines.hh"
 #include <cstdint>
@@ -11,10 +12,11 @@ const uint32_t TABLE_MAX_ROWS = ROWS_PER_PAGE * TABLE_MAX_PAGES;
 struct Table
 {
 public:
-  uint32_t num_rows;
-  void *pages[TABLE_MAX_PAGES];
+  int64_t num_rows;
+  Pager *pager;
 
-  Table();
-  ~Table();
+  Table(std::string filename);
+
   auto row_slot(uint32_t row_num) -> void *;
+  void close_proc();
 };

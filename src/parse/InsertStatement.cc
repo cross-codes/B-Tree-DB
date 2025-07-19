@@ -14,7 +14,7 @@ auto InsertStatement::execute(Table &table) -> int
 {
   if (error_)
   {
-    std::cout << "Error, unable to parse statement.\n";
+    std::cerr << "Error, unable to parse statement.\n";
     return -1;
   }
 
@@ -22,7 +22,7 @@ auto InsertStatement::execute(Table &table) -> int
 
   if (row.truncated)
   {
-    std::cout << "Error, entered string is too long.\n";
+    std::cerr << "Error, entered string is too long.\n";
     return -1;
   }
 
