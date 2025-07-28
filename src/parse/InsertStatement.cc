@@ -1,4 +1,5 @@
 #include "InsertStatement.hh"
+#include "../Node.hh"
 #include <iostream>
 #include <sstream>
 
@@ -19,6 +20,7 @@ auto InsertStatement::execute(Table &table) -> int
   }
 
   Row row(ID_, username_, email_);
+  Cursor cursor(&table, true);
 
   if (row.truncated)
   {
@@ -26,8 +28,7 @@ auto InsertStatement::execute(Table &table) -> int
     return -1;
   }
 
-  row.serialize_into_dest(table.row_slot(ID_));
-  table.num_rows += 1;
+  Node::leaf_node_insert(cursor, ID_, row);
 
   return 0;
 }

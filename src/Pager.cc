@@ -14,6 +14,13 @@ Pager::Pager(const std::string &filename)
 
   this->file_descriptor = fd;
   this->file_length     = lseek(fd, 0, SEEK_END);
+  this->num_pages       = (file_length / PAGE_SIZE);
+
+  if (file_length % PAGE_SIZE != 0)
+  {
+    std::cerr << "Db file is not a whole number of pages. Corrupt file.\n";
+    std::exit(1);
+  }
 
   for (uint32_t i = 0; i < TABLE_MAX_PAGES; i++)
   {
@@ -36,13 +43,13 @@ auto Pager::get_page(int64_t page_num) -> void *
 
   if (pages[page_num] == NULL)
   {
-    void *page        = malloc(PAGE_SIZE);
-    int64_t num_pages = file_length / PAGE_SIZE;
+    void *page = malloc(PAGE_SIZE);
+    int64_t np = file_length / PAGE_SIZE;
 
     if (this->file_length % PAGE_SIZE)
-      num_pages += 1;
+      np += 1;
 
-    if (page_num <= num_pages)
+    if (page_num <= np)
     {
       lseek(this->file_descriptor, page_num * PAGE_SIZE, SEEK_SET);
       ssize_t bytes_read = read(this->file_descriptor, page, PAGE_SIZE);
@@ -53,13 +60,16 @@ auto Pager::get_page(int64_t page_num) -> void *
       }
     }
 
+    if (page_num >= num_pages)
+      num_pages = page_num + 1;
+
     this->pages[page_num] = page;
   }
 
   return this->pages[page_num];
 }
 
-void Pager::flush(int64_t page_num, int64_t size)
+void Pager::flush(int64_t page_num)
 {
   if (pages[page_num] == NULL)
   {
@@ -74,7 +84,7 @@ void Pager::flush(int64_t page_num, int64_t size)
     exit(1);
   }
 
-  ssize_t bytes_written = write(file_descriptor, pages[page_num], size);
+  ssize_t bytes_written = write(file_descriptor, pages[page_num], PAGE_SIZE);
   if (bytes_written == -1)
   {
     std::cerr << "Error writing: " << errno << "\n";

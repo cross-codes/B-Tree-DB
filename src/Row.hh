@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <string>
 
-struct Row
+class Row
 {
 public:
   uint32_t id;

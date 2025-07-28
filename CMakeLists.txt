@@ -15,6 +15,8 @@ set(SOURCE_FILES
   src/parse/InsertStatement.cc
   src/parse/SelectStatement.cc
   src/Pager.cc
+  src/Cursor.cc
+  src/Node.cc
 )
 add_executable(db ${SOURCE_FILES})
 target_include_directories(db PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

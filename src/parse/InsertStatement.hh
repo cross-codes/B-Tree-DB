@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../Cursor.hh"
 #include "../Statement.hh"
 
 class InsertStatement : public Statement
