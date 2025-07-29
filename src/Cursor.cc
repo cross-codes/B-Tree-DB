@@ -1,5 +1,6 @@
 #include "Cursor.hh"
 #include "Node.hh"
+#include <iostream>
 
 Cursor::Cursor(Table *table, bool end) : table{table}
 {
@@ -18,6 +19,44 @@ Cursor::Cursor(Table *table, bool end) : table{table}
     uint32_t num_cells = *(Node::leaf_node_num_cells(root_node));
     cell_num           = num_cells;
     eot                = true;
+  }
+}
+
+Cursor::Cursor(Table *table, uint32_t key) : table{table}
+{
+  this->page_num = table->root_page_num;
+  void *root     = table->pager->get_page(table->root_page_num);
+
+  if (Node::get_node_type(root) == Node::NodeType::LEAF)
+  {
+    void *node                  = root;
+    uint32_t num_cells          = *(Node::leaf_node_num_cells(node));
+
+    uint32_t min_index          = 0;
+    uint32_t one_past_max_index = num_cells;
+    while (one_past_max_index != min_index)
+    {
+      uint32_t index = (min_index + one_past_max_index) / 2;
+      uint32_t key_at_index =
+          *reinterpret_cast<uint32_t *>((Node::leaf_node_key(node, index)));
+      if (key == key_at_index)
+      {
+        this->cell_num = index;
+        return;
+      }
+
+      if (key < key_at_index)
+        one_past_max_index = index;
+      else
+        min_index = index + 1;
+    }
+
+    cell_num = min_index;
+  }
+  else
+  {
+    std::cerr << "Unimplemented feature\n";
+    std::exit(1);
   }
 }
 

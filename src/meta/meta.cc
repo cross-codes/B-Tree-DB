@@ -50,7 +50,7 @@ void print_leaf_node(void *node)
 
   for (uint32_t i = 0; i < num_cells; i++)
   {
-    uint32_t key = *(Node::leaf_node_key(node, i));
+    uint32_t key = *reinterpret_cast<uint32_t *>(Node::leaf_node_key(node, i));
     std::cout << std::format("  - {} : {}\n", i, key);
   }
 }

@@ -1,5 +1,6 @@
 #include "Table.hh"
 #include "Node.hh"
+#include <cstring>
 #include <unistd.h>
 
 Table::Table(std::string filename)
@@ -10,6 +11,7 @@ Table::Table(std::string filename)
   if (this->pager->num_pages == 0)
   {
     void *root_node = this->pager->get_page(0);
+    std::memset(root_node, 0, PAGE_SIZE);
     Node::initialize_leaf_node(root_node);
   }
 }

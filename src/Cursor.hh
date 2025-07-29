@@ -9,6 +9,7 @@ public:
   Table *table{};
   bool eot;
   Cursor(Table *table, bool end);
+  Cursor(Table *table, uint32_t key_to_insert);
 
   void *get_value();
   void advance();
