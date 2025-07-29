@@ -6,7 +6,7 @@ SelectStatement::SelectStatement(std::string input) : Statement(input) {};
 auto SelectStatement::execute(Table &table) -> int
 {
   Row row(-1, "", "");
-  Cursor cursor(&table, false);
+  Cursor cursor(&table);
 
   while (!cursor.eot)
   {
