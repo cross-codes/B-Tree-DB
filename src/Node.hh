@@ -74,7 +74,7 @@ uint32_t *internal_node_cell(void *node, uint32_t cell_num);
 uint32_t *internal_node_child(void *node, uint32_t child_num);
 uint32_t *internal_node_key(void *node, uint32_t key_num);
 void initialize_internal_node(void *node);
-uint32_t get_node_max_key(void *node);
+uint32_t get_node_max_key(Pager *pager, void *node);
 
 uint32_t *leaf_node_next_leaf(void *node);
 
@@ -87,6 +87,8 @@ void internal_node_insert(Table *table, uint32_t parent_page_num,
                           uint32_t child_page_num);
 
 uint32_t internal_node_find_child(void *node, uint32_t key);
+void internal_node_split_and_insert(Table *table, uint32_t parent_page_num,
+                                    uint32_t child_page_num);
 
 NodeType get_node_type(void *node);
 void set_node_type(void *Node, NodeType type);

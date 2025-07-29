@@ -72,17 +72,21 @@ void print_tree(Pager *pager, uint32_t page_num, uint32_t indentation_level)
     indent(indentation_level);
     std::cout << std::format("- internal (size {})\n", num_keys);
 
-    for (uint32_t i = 0; i < num_keys; i++)
+    if (num_keys > 0)
     {
-      child = *Node::internal_node_child(node, i);
+      for (uint32_t i = 0; i < num_keys; i++)
+      {
+        child = *Node::internal_node_child(node, i);
+        print_tree(pager, child, indentation_level + 1);
+
+        indent(indentation_level + 1);
+        std::cout << std::format("- key {}\n",
+                                 *Node::internal_node_key(node, i));
+      }
+
+      child = *Node::internal_node_right_child(node);
       print_tree(pager, child, indentation_level + 1);
-
-      indent(indentation_level + 1);
-      std::cout << std::format("- key {}\n", *Node::internal_node_key(node, i));
     }
-
-    child = *Node::internal_node_right_child(node);
-    print_tree(pager, child, indentation_level + 1);
     break;
   }
 }
