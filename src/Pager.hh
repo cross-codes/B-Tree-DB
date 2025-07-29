@@ -16,4 +16,5 @@ public:
 
   void *get_page(int64_t page_num);
   void flush(int64_t page_num);
+  uint32_t get_unused_page();
 };

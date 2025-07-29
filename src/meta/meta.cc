@@ -21,7 +21,7 @@ auto process_meta_cmd(std::string input, Table &table) -> MetaCommandResult
   else if (input == ".btree")
   {
     std::cout << "Tree order statistics:\n";
-    print_leaf_node(table.pager->get_page(0));
+    print_tree(table.pager, 0, 0);
     return MetaCommandResult::META_COMMAND_SUCCESS;
   }
   else
@@ -43,15 +43,47 @@ void print_constants()
                            Node::LEAF_NODE_MAX_CELLS);
 }
 
-void print_leaf_node(void *node)
+void print_tree(Pager *pager, uint32_t page_num, uint32_t indentation_level)
 {
-  uint32_t num_cells = *(Node::leaf_node_num_cells(node));
-  std::cout << std::format("leaf (size {})\n", num_cells);
+  auto indent = [](uint32_t level) {
+    for (uint32_t i = 0; i < level; i++)
+      std::cout << " ";
+  };
 
-  for (uint32_t i = 0; i < num_cells; i++)
+  void *node = pager->get_page(page_num);
+  uint32_t num_keys, child;
+
+  switch (Node::get_node_type(node))
   {
-    uint32_t key = *reinterpret_cast<uint32_t *>(Node::leaf_node_key(node, i));
-    std::cout << std::format("  - {} : {}\n", i, key);
+  case (Node::NodeType::LEAF):
+    num_keys = *Node::leaf_node_num_cells(node);
+    indent(indentation_level);
+    std::cout << std::format("- leaf (size {})\n", num_keys);
+    for (uint32_t i = 0; i < num_keys; i++)
+    {
+      indent(indentation_level + 1);
+      std::cout << std::format(" - {}\n", *(reinterpret_cast<uint32_t *>(
+                                              Node::leaf_node_key(node, i))));
+    }
+    break;
+
+  case (Node::NodeType::INTERNAL):
+    num_keys = *Node::internal_node_num_keys(node);
+    indent(indentation_level);
+    std::cout << std::format("- internal (size {})\n", num_keys);
+
+    for (uint32_t i = 0; i < num_keys; i++)
+    {
+      child = *Node::internal_node_child(node, i);
+      print_tree(pager, child, indentation_level + 1);
+
+      indent(indentation_level + 1);
+      std::cout << std::format("- key {}\n", *Node::internal_node_key(node, i));
+    }
+
+    child = *Node::internal_node_right_child(node);
+    print_tree(pager, child, indentation_level + 1);
+    break;
   }
 }
 } // namespace meta

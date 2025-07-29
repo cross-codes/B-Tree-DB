@@ -91,3 +91,8 @@ void Pager::flush(int64_t page_num)
     exit(1);
   }
 }
+
+auto Pager::get_unused_page() -> uint32_t
+{
+  return static_cast<uint32_t>(num_pages);
+}

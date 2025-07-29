@@ -13,6 +13,7 @@ Table::Table(std::string filename)
     void *root_node = this->pager->get_page(0);
     std::memset(root_node, 0, PAGE_SIZE);
     Node::initialize_leaf_node(root_node);
+    Node::set_node_root(root_node, true);
   }
 }
 
