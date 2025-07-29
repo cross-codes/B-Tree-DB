@@ -3,7 +3,7 @@
 #include <iostream>
 #include <sstream>
 
-InsertStatement::InsertStatement(std::string input) : Statement(input)
+InsertStatement::InsertStatement(std::string input) : Statement(input), error_{false}
 {
   std::istringstream iss(input.substr(6, std::string::npos));
   iss >> ID_ >> username_ >> email_;
